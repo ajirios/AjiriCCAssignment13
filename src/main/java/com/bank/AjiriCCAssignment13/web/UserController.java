@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.bank.AjiriCCAssignment13.domain.Account;
 import com.bank.AjiriCCAssignment13.domain.Address;
 import com.bank.AjiriCCAssignment13.domain.User;
-import com.bank.AjiriCCAssignment13.repository.AccountRepository;
-import com.bank.AjiriCCAssignment13.repository.AddressRepository;
+import com.bank.AjiriCCAssignment13.service.AccountService;
 import com.bank.AjiriCCAssignment13.service.UserService;
 
 @Controller
@@ -23,12 +22,9 @@ public class UserController
 {
 	@Autowired
 	private UserService userService;
-
-	@Autowired
-	private AddressRepository addressRepository;
 	
 	@Autowired
-	private AccountRepository accountRepository;
+	private AccountService accountService;
 	
 	@GetMapping("/")
 	public String getRoot(ModelMap model)
@@ -120,7 +116,7 @@ public class UserController
 	
 	{
 		modelMap.put("user", this.userService.findById(userId));
-		modelMap.put("account", this.accountRepository.findById(accountId));
+		modelMap.put("account", this.accountService.findById(accountId));
 		return "account";
 	}
 	
@@ -128,7 +124,7 @@ public class UserController
 	public String postUserAccount(@PathVariable Long userId, @PathVariable Long accountId, Account account)
 	
 	{
-		this.accountRepository.save(account);
+		this.accountService.saveAccount(account);
 		return "redirect:/users/" + userId + "/accounts/" + accountId;
 	}
 }

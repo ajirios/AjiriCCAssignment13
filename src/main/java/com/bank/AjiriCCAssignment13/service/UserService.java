@@ -62,16 +62,8 @@ public class UserService
 	public User saveUser(User user) 
 	
 	{
-		if (user.getUserId() == null)
+		if (user.getUserId() != null)
 			
-		{
-			Account checkingAccount = new Account();
-			checkingAccount.setAccountName("Checking Account");
-			checkingAccount.getUsers().add(user);
-			user.getAccounts().add(checkingAccount);
-			this.accountRepository.save(checkingAccount);
-		}
-		else
 		{
 			Address address = user.getAddress();
 			
@@ -90,6 +82,30 @@ public class UserService
 	public void delete(Long userId) 
 	
 	{
+		User user = findById(userId);
+		
+		if (user.getAddress() != null)
+			
+		{
+			this.addressRepository.delete(user.getAddress());
+		}
+		
+		/*
+		if (user.getAccounts().size() > 0)
+			
+		{
+			for (Account account : user.getAccounts())
+			{
+				Long accountId = account.getAccountId();
+				
+				if (account.getUsers().size() < 2)
+				{
+					this.accountRepository.deleteById(accountId);
+				}
+			}
+		}
+		*/
+		
 		this.userRepository.deleteById(userId);
 	}
 
